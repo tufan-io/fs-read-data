@@ -8,7 +8,6 @@ import * as ini from 'ini';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as a from 'awaiting';
-import * as program from 'commander';
 
 const getFileWithExt = async (fname) => {
   const p = path.parse(fname);
@@ -35,6 +34,13 @@ const getFileWithExt = async (fname) => {
 
 const content = async fname => a.callback(fs.readFile, fname, 'utf8');
 
+/**
+ * Reads filename in one of the supported formats
+ * and returns a promise that resolves to a JavaScript object.
+ *
+ * @async
+ * @param fname file to read
+ */
 export const readFile = async (fname) => {
   const { filename, ext } = await getFileWithExt(fname);
   switch (ext) {
@@ -48,17 +54,3 @@ export const readFile = async (fname) => {
   }
 };
 
-if (require.main === module) {
-  const pkg = require(path.join(__dirname, '..', 'package.json'));
-  program
-    .version(pkg.version)
-    .usage(`[fname]`)
-    .description('reads [fname] in {json, yaml, ini, toml}, prints resulting Object to stdout.')
-    .parse(process.argv);
-  readFile(program.args[0]).then(obj => {
-    console.log(JSON.stringify(obj, null, 2));
-  }).catch((err) => {
-    console.error(err.message);
-    console.error(err.stack);
-  });
-}

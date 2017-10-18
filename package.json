@@ -1,6 +1,6 @@
 {
   "name": "fs-read-data",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Reads files in multiple formats (json, yaml, toml, ini, js) into a JavaScript object",
   "keywords": [
     "json",
@@ -21,8 +21,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "read-data": "dist/index.js",
-    "fs-read-data": "dist/index.js"
+    "read-data": "dist/cli.js",
+    "fs-read-data": "dist/cli.js"
   },
   "files": [
     "dist",
@@ -43,7 +43,7 @@
     "check": "npm outdated",
     "check-coverage": "nyc check-coverage --lines 95 --functions 95 --branches 95 --statements 95",
     "coveralls-report": "nyc report --reporter=text-lcov | coveralls",
-    "test-with-cover": "nyc -r html -r text-summary ava",
+    "test-with-cover": "nyc -r html -r text-summary ava --verbose",
     "test-without-cover": "ava",
     "build": "npm-run-batch",
     "build:dist": "run-batch",

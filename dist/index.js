@@ -16,7 +16,6 @@ const ini = require("ini");
 const fs = require("fs");
 const path = require("path");
 const a = require("awaiting");
-const program = require("commander");
 const getFileWithExt = (fname) => __awaiter(this, void 0, void 0, function* () {
     const p = path.parse(fname);
     const base = path.join(p.dir, p.base);
@@ -53,17 +52,3 @@ exports.readFile = (fname) => __awaiter(this, void 0, void 0, function* () {
         default: throw new Error(`unknown file extension ${filename} ${ext}`);
     }
 });
-if (require.main === module) {
-    const pkg = require(path.join(__dirname, '..', 'package.json'));
-    program
-        .version(pkg.version)
-        .usage(`[fname]`)
-        .description('reads [fname] in {json, yaml, ini, toml}, prints resulting Object to stdout.')
-        .parse(process.argv);
-    exports.readFile(program.args[0]).then(obj => {
-        console.log(JSON.stringify(obj, null, 2));
-    }).catch((err) => {
-        console.error(err.message);
-        console.error(err.stack);
-    });
-}

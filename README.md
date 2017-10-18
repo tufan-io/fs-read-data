@@ -14,14 +14,20 @@
 
 `fs-read-data` is a simple mechanism to read files in this one of multiple formats {json, js, yaml, ini, toml}.
 
-It even works from the CLI, a great way to test that a hand-crafted
-data file is upto snuff.
+Provides a CLI and API interface to underlying capability, making conversion of
+data-formats a breeze, especially when coupled with [fs-write-data](https://github.com/tufan-io/fs-write-data)
+
+### Why?
 
 It's common to have data files in one of multiple well-known formats (json, yaml, ini, toml).
 Sometimes these are config files, sometimes they are just declartive definitions.
 
+This is a tool to help work with such files without getting in your way.
+
+Great for checking validity of hand-crafted data files.
+
 Compared to a single spurious babel module installation, the additional
-weight of multiple file parsers was considered acceptable  collateral-weight.
+weight of multiple file parsers was considered acceptable collateral-weight.
 
 ## Installation
 
@@ -35,18 +41,47 @@ yarn install fs-read-data
 
 ## Usage
 
+### CLI
+```bash
+
+  Usage: read-data [fname]
+
+  reads [fname] in {json, yaml, ini, toml}, prints resulting json to stdout.
+
+
+  Options:
+
+    -V, --version  output the version number
+    -h, --help     output usage information
+```
+
+### API
+
+Exposes a single function via the API
+
+```javascript
+/**
+ * Reads filename in one of the supported formats
+ * and returns a promise that resolves to a JavaScript object.
+ *
+ * @async
+ * @param fname file to read
+ */
+async readFile(fname);
+```
+
 ```javascript
 
-const reader = require('fs-read-data');
+const read = require('fs-read-data');
 
 // one of these
-const data = reader(`/path/to/file/data`); // auto-detects available extension. Error if multiple found
-const data = reader(`/path/to/file/data.json`);
-const data = reader(`/path/to/file/data.yaml`);
-const data = reader(`/path/to/file/data.yml`);
-const data = reader(`/path/to/file/data.js`); // must return a single object
-const data = reader(`/path/to/file/data.ini`);
-const data = reader(`/path/to/file/data.toml`);
+const data = read(`/path/to/file/data`); // auto-detects available extension. Error if multiple found
+const data = read(`/path/to/file/data.json`);
+const data = read(`/path/to/file/data.yaml`);
+const data = read(`/path/to/file/data.yml`);
+const data = read(`/path/to/file/data.js`); // must return a single object
+const data = read(`/path/to/file/data.ini`);
+const data = read(`/path/to/file/data.toml`);
 ```
 
 ## Development Tooling
@@ -56,6 +91,19 @@ Described [here](./docs/DevTools.md)
 ## Related
 
 [fs-write-data](https://github.com/tufan-io/fs-write-data)
+
+### Dependencies
+
+This is an aggregation module, much like [fs-extra](https://npmjs.org/package/fs-extra).
+It's built upon the shoulders of libraries that provide it's core functionality.
+
+[js-yaml](https://www.npmjs.com/package/js-yaml)
+[ini](https://www.npmjs.com/package/ini)
+[toml](https://www.npmjs.com/package/toml)
+
+Support cast:
+[awaiting](https://www.npmjs.com/package/awaiting)
+[commander](https://www.npmjs.com/package/commander)
 
 ## License
 
