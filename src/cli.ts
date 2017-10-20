@@ -4,7 +4,7 @@ import * as program from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as a from 'awaiting';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { readFile } from '.';
 
 const pkg = require(path.join(__dirname, '..', 'package.json'));

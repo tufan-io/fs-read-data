@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const program = require("commander");
 const path = require("path");
-const chalk = require("chalk");
+const chalk_1 = require("chalk");
 const _1 = require(".");
 const pkg = require(path.join(__dirname, '..', 'package.json'));
 program
@@ -14,6 +14,6 @@ program
 _1.readFile(program.args[0]).then(obj => {
     console.log(JSON.stringify(obj, null, 2));
 }).catch((err) => {
-    console.error(chalk.red(err.message));
-    console.error(chalk.red(err.stack));
+    console.error(chalk_1.default.red(err.message));
+    console.error(chalk_1.default.red(err.stack));
 });
