@@ -86,7 +86,8 @@ const data = read(`/path/to/file/data.toml`);
 
 ## Development Tooling
 
-Described [here](./docs/DevTools.md)
+- [Development tooling](./docs/DevTools.md)
+- [Changelog]('./CHANGELOG.md')
 
 ## Related
 
