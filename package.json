@@ -1,6 +1,6 @@
 {
   "name": "fs-read-data",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Reads files in multiple formats (json, yaml, toml, ini, js) into a JavaScript object",
   "keywords": [
     "json",
