@@ -72,16 +72,19 @@ async readFile(fname);
 
 ```javascript
 
-const read = require('fs-read-data');
+const read = require('fs-read-data').readFile;
 
 // one of these
-const data = read(`/path/to/file/data`); // auto-detects available extension. Error if multiple found
-const data = read(`/path/to/file/data.json`);
-const data = read(`/path/to/file/data.yaml`);
-const data = read(`/path/to/file/data.yml`);
-const data = read(`/path/to/file/data.js`); // must return a single object
-const data = read(`/path/to/file/data.ini`);
-const data = read(`/path/to/file/data.toml`);
+
+// auto-detects available extension, throws on multiple extensions
+const data = await read(`/path/to/file/data`);
+// read specific extension
+const data = await read(`/path/to/file/data.json`);
+const data = await read(`/path/to/file/data.yaml`);
+const data = await read(`/path/to/file/data.yml`);
+const data = await read(`/path/to/file/data.js`); // must return a single object
+const data = await read(`/path/to/file/data.ini`);
+const data = await read(`/path/to/file/data.toml`);
 ```
 
 ## Development Tooling

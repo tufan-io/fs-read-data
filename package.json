@@ -1,6 +1,6 @@
 {
   "name": "fs-read-data",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Reads files in multiple formats (json, yaml, toml, ini, js) into a JavaScript object",
   "keywords": [
     "json",
@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "private": false,
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=10.0.0"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -31,89 +31,85 @@
   "scripts": {
     "commit": "git-cz",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "todos": "leasot --exit-nicely --skip-unsupported ./src",
     "staged-mods-ok": "git-mods --staged_ok",
     "no-mods": "git-mods",
-    "clean": "rimraf build .nyc_output coverage",
-    "clean:dist": "rimraf dist",
-    "lint": "tslint -c tslint.json src/**/*.ts",
-    "compile:build": "tsc",
-    "compile:dist": "tsc -p tsconfig.dist.json",
+    "clean": "rimraf dist .nyc_output coverage *.tsbuildinfo",
+    "lint": "tslint -c tslint.json --project ./tsconfig.json --format stylish",
+    "compile": "tsc",
     "compile:watch": "tsc -w",
     "sh": "npm-sh",
-    "secure": "nsp check",
+    "secure": "npm audit",
     "check": "npm outdated",
     "check-coverage": "nyc check-coverage --lines 95 --functions 95 --branches 95 --statements 95",
     "coveralls-report": "nyc report --reporter=text-lcov | coveralls",
-    "test-with-cover": "nyc -r html -r text-summary ava --verbose",
-    "test-without-cover": "ava",
+    "nyc-report": "nyc report --reporter=text-summary",
+    "test": "cross-env NODE_ENV=test nyc -r html -r lcov -r text-summary ava --verbose",
+    "test-no-cover": "cross-env NODE_ENV=test ava --verbose",
     "build": "npm-run-batch",
-    "build:dist": "run-batch",
-    "build:watch": "cross-env NODE_ENV=production run-batch",
+    "qt": "npm-run-batch",
     "pkg-ok": "pkg-ok",
-    "precommit": "run-batch",
-    "prepush": "run-batch"
+    "dep-check": "dependency-check . --no-dev",
+    "pre-commit-hook": "run-batch",
+    "pre-push-hook": "run-batch",
+    "snapshots": "cross-env NODE_ENV=test ava --verbose --update-snapshots",
+    "cloc": "cloc --exclude-dir=test --by-file ./src"
   },
   "run-batch": {
     "build": [
-      "clean",
       "lint",
-      "compile:build",
-      "test-with-cover"
+      "clean",
+      "compile",
+      "test",
+      "todos"
     ],
-    "build:watch": [
-      "compile:watch"
+    "qt": [
+      "compile",
+      "test-no-cover"
     ],
-    "build:dist": [
-      "build",
+    "pre-commit-hook": [
       "check-coverage",
-      "clean:dist",
-      "compile:dist",
-      "pkg-ok"
-    ],
-    "precommit": [
-      "build:dist",
+      "dep-check",
+      "pkg-ok",
       "staged-mods-ok"
     ],
-    "prepush": [
-      "build:dist",
+    "pre-push-hook": [
       "secure",
       "no-mods"
     ]
   },
   "devDependencies": {
-    "@types/circular-json": "^0.4.0",
-    "@types/node": "^10.3.4",
-    "@types/semver": "^5.5.0",
-    "ava": "^0.25.0",
-    "commander": "^2.15.1",
-    "commitizen": "^2.10.1",
-    "conventional-changelog-cli": "^2.0.1",
-    "coveralls": "^3.0.1",
+    "@types/node": "^12.0.10",
+    "ava": "^2.1.0",
+    "commitizen": "^3.1.1",
+    "conventional-changelog-cli": "^2.0.22",
+    "coveralls": "^3.0.4",
     "cross-env": "^5.2.0",
     "cz-conventional-changelog": "^2.1.0",
-    "execa": "^0.10.0",
+    "dependency-check": "^3.3.0",
+    "execa": "^2.0.1",
     "git-mods": "^1.0.9",
-    "graceful-fs": "^4.1.11",
-    "husky": "^0.14.3",
-    "mkdirp": "^0.5.1",
-    "node-emoji": "^1.5.1",
-    "npm-run-batch": "0.0.6",
-    "nsp": "^3.2.1",
-    "nyc": "^12.0.2",
-    "pkg-ok": "^2.2.0",
-    "rimraf": "^2.6.1",
-    "tslint": "^5.10.0",
-    "typescript": "^2.9.2"
+    "husky": "^2.4.1",
+    "leasot": "^7.4.0",
+    "npm-run-batch": "0.0.8",
+    "nyc": "^14.1.1",
+    "parse-git-config": "^3.0.0",
+    "pkg-ok": "^2.3.1",
+    "rimraf": "^2.6.3",
+    "tslint": "^5.17.0",
+    "tslint-config-security": "^1.16.0",
+    "tslint-sonarts": "^1.7.0",
+    "typescript": "^3.5.1",
+    "typestrict": "^1.0.2"
   },
   "dependencies": {
-    "@types/chalk": "^2.2.0",
     "awaiting": "^3.0.0",
-    "chalk": "^2.4.1",
+    "chalk": "^2.4.2",
+    "commander": "^2.20.0",
     "ini": "^1.3.5",
-    "js-yaml": "^3.12.0",
+    "js-yaml": "^3.13.1",
     "runtime-engine-check": "^1.0.0",
-    "semver": "^5.5.0",
-    "toml": "^2.3.3"
+    "toml": "^3.0.0"
   },
   "config": {
     "commitizen": {
@@ -121,19 +117,31 @@
     }
   },
   "ava": {
+    "serial": false,
     "files": [
-      "build/**/test.js",
-      "build/**/test/specs/**/*.js"
+      "dist/**/test.js",
+      "dist/**/test/**/*.js",
+      "!dist/**/test/fixtures/**/*.js",
+      "!dist/**/helpers/**"
     ],
-    "source": [
-      "build/**/*.js"
+    "sources": [
+      "dist/**/*.js"
     ]
   },
   "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
     "exclude": [
-      "build/**/test/**/*.*",
-      "build/**/test.js",
-      "dist"
+      "**/test/**",
+      "**/helpers/**"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run pre-commit-hook",
+      "pre-push": "npm run pre-push-hook"
+    }
   }
 }

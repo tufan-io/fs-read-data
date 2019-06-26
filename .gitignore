@@ -1,4 +1,13 @@
-build
+dist/**/*test.*
+dist/**/test/*
+
+# ignore temporary files
+.tmp*
+.junk*
+.tufan*
+
+# ignore typescript incremental build into
+*.tsbuildinfo
 
 # Logs
 logs

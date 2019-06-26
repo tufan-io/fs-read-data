@@ -23,7 +23,6 @@ This package take an opinioned view on the Developer-Experience with an eye towa
 There are four operations that will be part of a developer experience:
 
 - `npm build`: cleans, lints, builds and tests with coverage metrics.
-- `npm build:dist`: generates distribution artifacts
 - `git cz`: formats commit message to ease generation of Changelogs
 - `git push`: a pre-push hook runs coverage-check, checks packages for updates and unpatched vulnerabilities
 
@@ -41,9 +40,8 @@ a simple pipeline of tasks to perform for each build step.
 *aside:* To help with these, we recommend [npm-completion](https://docs.npmjs.com/cli/completion)
 
     commit      : uses `commitizen` to help format commit messages
-    clean       : `rimraf ./build ./coverage`
+    clean       : `rimraf ./dist ./coverage`
     build       : builds the project
-    build:dist  : build a distribution - skips compiling test files
     build:watch : watch project files and rebuild when anything changes
     test        : runs tests with coverage on generated JavaScript
     secure      : checks all installed dependencies for vulnerabilities
@@ -81,15 +79,4 @@ reconsidered.
     ├── coverage/
     |   └── typescript/
     |       └── index.html    - html report of typescript
-    ├── dist/                 - Commmitted to repo. Minimizes package size
-    └── build/                - scratch dir - for build & test
-
-### Why are there two tsconfig*.json files
-
-TypeScript compiler configuration, tsconfig.json does not support multiple
-build targets. To create separate builds then, one has to use multiple config
-files and invoke atleast one of them explicitly like we do.
-
-Further, our opinioned preferences is to keep source and associated tests
-together in the source tree. This requires to compile time configurations -
-a regular build that includes
+    └── dist/                 - Commmitted to repo. Minimizes package size

@@ -1,32 +1,23 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const engchk = require("runtime-engine-check");
 engchk();
-const yaml = require("js-yaml");
-const toml = require("toml");
-const ini = require("ini");
-const fs = require("fs");
-const path = require("path");
 const a = require("awaiting");
-const getFileWithExt = (fname) => __awaiter(this, void 0, void 0, function* () {
+const fs = require("fs");
+const ini = require("ini");
+const yaml = require("js-yaml");
+const path = require("path");
+const toml = require("toml");
+const getFileWithExt = async (fname) => {
     const p = path.parse(fname);
-    const base = path.join(p.dir, p.base);
-    if (p.ext === '') {
-        const flist = (yield a.callback(fs.readdir, p.dir)).filter(f => f.match(p.name));
+    if (p.ext === "") {
+        const flist = (await a.callback(fs.readdir, p.dir)).filter((f) => f.match(p.name));
         switch (flist.length) {
             case 1: {
                 const q = path.parse(flist[0]);
                 return {
+                    ext: q.ext.replace(/^\./, ""),
                     filename: path.join(p.dir, flist[0]),
-                    ext: q.ext.replace(/^\./, '')
                 };
             }
             case 0:
@@ -36,19 +27,20 @@ const getFileWithExt = (fname) => __awaiter(this, void 0, void 0, function* () {
         }
     }
     else {
-        return { filename: fname, ext: p.ext.replace(/^\./, '') };
+        return { filename: fname, ext: p.ext.replace(/^\./, "") };
     }
-});
-const content = (fname) => __awaiter(this, void 0, void 0, function* () { return a.callback(fs.readFile, fname, 'utf8'); });
-exports.readFile = (fname) => __awaiter(this, void 0, void 0, function* () {
-    const { filename, ext } = yield getFileWithExt(fname);
+};
+const content = async (fname) => a.callback(fs.readFile, fname, "utf8");
+exports.readFile = async (fname) => {
+    const { filename, ext } = await getFileWithExt(fname);
     switch (ext) {
-        case 'json': return JSON.parse(yield content(filename));
-        case 'yaml':
-        case 'yml': return yaml.safeLoad(yield content(filename));
-        case 'ini': return ini.parse(yield content(filename));
-        case 'toml': return toml.parse(yield content(filename));
-        case 'js': return require(filename);
+        case "json": return JSON.parse(await content(filename));
+        case "yaml":
+        case "yml": return yaml.safeLoad(await content(filename));
+        case "ini": return ini.parse(await content(filename));
+        case "toml": return toml.parse(await content(filename));
+        case "js": return require(filename);
         default: throw new Error(`unknown file extension ${filename} ${ext}`);
     }
-});
+};
+//# sourceMappingURL=index.js.map
